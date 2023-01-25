@@ -1,4 +1,5 @@
-import {IsEmail, IsNotEmpty, IsString, MaxLength, MinLength} from 'class-validator'
+import { ApiProperty } from '@nestjs/swagger';
+import { IsEmail, IsNotEmpty, MaxLength, MinLength } from 'class-validator';
 export class UserModel {
   id?: string;
   @MinLength(5)
@@ -10,53 +11,82 @@ export class UserModel {
   @MaxLength(11)
   phoneNum: string;
   profilePicture: string;
-  
   activationStatus: activationState | any;
   role: 'master' | 'import' | 'bought' | 'store';
 }
-export class GetAllDTO{
-  role:'master' | 'import' | 'bought' | 'store'
+export class GetAllDTO {
+  role: 'master' | 'import' | 'bought' | 'store';
 }
 interface activationState {
   label: string;
   value: string;
 }
-export class LoginDTO{
+export class LoginDTO {
+  @ApiProperty()
+  @IsNotEmpty()
   @IsEmail()
-  email:string;
+  email: string;
+
+  @ApiProperty()
   @MinLength(5)
   @MinLength(8)
-  password:string;
+  @IsNotEmpty()
+  password: string;
 }
-export class UpdateUserDTO{
+export class UpdateUserDTO {
+  @ApiProperty()
   @IsNotEmpty()
   id: string;
+
+  @ApiProperty()
   @MinLength(5)
   @MaxLength(20)
+  @IsNotEmpty()
   fullname: string;
+
+  @ApiProperty()
   @IsEmail()
+  @IsNotEmpty()
   email: string;
+
+  @ApiProperty()
   @MinLength(11)
   @MaxLength(11)
+  @IsNotEmpty()
   phoneNum: string;
-  profilePicture: string;  
+  @ApiProperty()
+  profilePicture: string;
+  @ApiProperty()
   activationStatus: activationState | any;
-  role: 'master' | 'import' | 'bought' | 'store'; 
+  @ApiProperty()
+  role: 'master' | 'import' | 'bought' | 'store';
 }
 
-export class RegisterUserDTO{
+export class RegisterUserDTO {
+  @ApiProperty()
   @MinLength(5)
   @MaxLength(20)
+  @IsNotEmpty()
   fullname: string;
+
+  @ApiProperty()
   @IsEmail()
+  @IsNotEmpty()
   email: string;
+  @ApiProperty()
   @MinLength(11)
   @MaxLength(11)
+  @IsNotEmpty()
   phoneNum: string;
+  @ApiProperty()
   @MinLength(5)
   @MaxLength(8)
-  password:string;
-  profilePicture: string;  
-  activationStatus: activationState | any;
-  role: 'master' | 'import' | 'bought' | 'store';
+  @IsNotEmpty()
+  password: string;
+  @ApiProperty()
+  profilePicture: string;
+  @ApiProperty()
+  isActive: string;
+  @ApiProperty()
+  role: string;
 }

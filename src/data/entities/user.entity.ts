@@ -6,7 +6,7 @@ export class UserEntity {
   id: string;
   @Column()
   fullname: string;
-  @Column({unique:true})
+  @Column({ unique: true })
   email: string;
   @Column()
   phoneNum: string;
@@ -15,7 +15,7 @@ export class UserEntity {
   @Column({ default: 'empty.jpg' })
   profilePicture: string;
   @Column({ default: 'inactivo' })
-  activationStatus: 'activo' | 'inactivo' | 'bloqueado';
+  isActive: string;
   @Column()
-  role: 'master' | 'import' | 'bought' | 'store';
+  role: string;
 }

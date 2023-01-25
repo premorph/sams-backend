@@ -12,17 +12,18 @@ import { Repository } from 'typeorm';
 
 @Injectable()
 export class Jwtstrategy extends PassportStrategy(Strategy) {
-    constructor(
-        @InjectRepository(UserEntity) private readonly userRepository:Repository<UserEntity>
-    ){
-        super({
-            jwtFromRequest:ExtractJwt.fromAuthHeaderAsBearerToken(),
-            ignoreExpiration:false,
-            secretOrKey:process.env.SECRET_JWT
-        })
-    }
-    async validate(payload:UserModel){
-        const user = this.userRepository.findOne({where:{id:payload.id}})
-        return user
-    }
+  constructor(
+    @InjectRepository(UserEntity)
+    private readonly userRepository: Repository<UserEntity>,
+  ) {
+    super({
+      jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+      ignoreExpiration: false,
+      secretOrKey: process.env.SECRET_JWT,
+    });
+  }
+  async validate(payload: UserModel) {
+    const user = this.userRepository.findOne({ where: { id: payload.id } });
+    return user;
+  }
 }

@@ -1,83 +1,103 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { GetAllDTO, RegisterUserDTO, UserModel } from 'src/data/contract/user.contract';
 import { UserEntity } from 'src/data/entities/user.entity';
-import { UserContract } from 'src/domain/contract/user.contract';
 import { Repository } from 'typeorm';
+import { UpdateUserDTO, RegisterUserDTO } from 'src/data/contract/';
 import { encrypt } from '../utils';
+import { UserModel } from '../../data/contract/user.contract';
 
 @Injectable()
-export default class UserService implements UserContract<UserModel,Object> {
+export default class UserService {
   constructor(
     @InjectRepository(UserEntity)
-    private userRepository: Repository<UserEntity>,
+    private readonly userRepository: Repository<UserEntity>,
   ) {}
-  async Create(param: RegisterUserDTO): Promise<UserModel> {
+  async create(params: RegisterUserDTO) {
     try {
-      const user = await this.userRepository.findOne({where:{email:param.email}})
-      if(user){
-        return user
-      }
-      param.password= await encrypt(param.password)
-      const userCreate = await this.userRepository.create(param)
-      if(!userCreate){
-        return null
-      }
-      return userCreate
-      
-    } catch (error) {
-      return error
-    }
-  }
-  async GetAll(param: GetAllDTO): Promise<UserModel[]> {
-    try {
-      const user = await this.userRepository.find({
-        where: { role: param.role },
+      const userExist = await this.userRepository.findOne({
+        where: { email: params.email },
       });
-      if (user) {
-        return user;
-      }
-      return null;
-    } catch (error) {
-      return error;
+      if (userExist)
+        throw new HttpException(
+          'USER_REGISTER_PREVIOUSLY',
+          HttpStatus.CONFLICT,
+        );
+      const passwordHash = await encrypt(params.password);
+      params.password = passwordHash;
+      const userData = await this.userRepository.save(params);
+      console.log(userData);
+      if (!userData)
+        throw new HttpException('SOMETHING_WENT_WRONG', HttpStatus.BAD_REQUEST);
+      return userData;
+    } catch (error: any) {
+      throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
-  async GetOne(param: UserModel,id:string): Promise<UserModel> {
+  async GetAll() {
     try {
-      const user = await this.userRepository.findOne({
-        where: { role: param.role, id: param.id },
+      const users = await this.userRepository.find({
+        select: {
+          email: true,
+          fullname: true,
+          phoneNum: true,
+          role: true,
+          isActive: true,
+          id: true,
+        },
       });
-      if (user) {
-        return user;
-      }
-      return null;
+      if (!users)
+        throw new HttpException('USERS_NOT_FOUND', HttpStatus.CONFLICT);
+      return users;
     } catch (error) {
-      return error;
+      throw new HttpException(
+        'INTERNAL_ERROR',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
     }
   }
-  async UpdateOne(param: UserModel, id: string): Promise<UserModel> {
+  async GetOne(params: UserModel) {
     try {
-      const data = await this.userRepository.update(id, param);
-      if (!data) {
-        return null;
-      }
-      const user = await this.userRepository.findOne({ where: { id: id } });
-      if (!user) {
-        return null;
-      }
-      return user;
+      const users = await this.userRepository.find({
+        select: {
+          email: true,
+          fullname: true,
+          phoneNum: true,
+          role: true,
+          isActive: true,
+          id: true,
+        },
+        where: {
+          id: params.id,
+        },
+      });
+      if (!users)
+        throw new HttpException('USERS_NOT_FOUND', HttpStatus.CONFLICT);
+      return users;
     } catch (error) {
-      return error;
+      throw new HttpException(
+        'INTERNAL_ERROR',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
     }
   }
   async DeleteOne(id: string) {
-    try {
-      const user = await this.userRepository.findOne({ where: { id: id } });
-      if (!user) throw new HttpException('INTERNAL_ERROR',HttpStatus.BAD_REQUEST)
-      await this.userRepository.delete(id);
-      return 'delete complete';
-    } catch (error) {
-      return error;
-    }
+    const userDelete = this.userRepository
+      .createQueryBuilder('users')
+      .softDelete()
+      .where('id=:id', { id: id })
+      .execute();
+    console.log(userDelete);
+  }
+  async UpdateOne(param: UpdateUserDTO, id: string) {
+    const isExist = await this.userRepository.find({
+      where: {
+        id: id,
+      },
+    });
+    if (!isExist)
+      throw new HttpException('USER_NOT_FOUND', HttpStatus.NOT_FOUND);
+    const user = await this.userRepository.update(id, param);
+    if (!user) throw new HttpException('USERS_NOT_FOUND', HttpStatus.CONFLICT);
+    return user;
   }
 }

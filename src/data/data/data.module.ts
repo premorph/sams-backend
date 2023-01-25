@@ -3,18 +3,19 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { DataSource } from 'typeorm';
 import { BalanceEntity } from '../entities/balance.entity';
 import { UserEntity } from '../entities/user.entity';
+export type Type = 'mssql' | 'mysql' | 'oracle' | 'mariadb';
 @Module({
   imports: [
     TypeOrmModule.forRoot({
-      type: 'mssql',
+      type: 'mysql',
       host: 'localhost',
-      port: 1443,
-      username: 'node',
+      port: 3306,
+      username: 'root',
       password: 'HAn.1208',
       database: 'sams',
       entities: [BalanceEntity, UserEntity],
       synchronize: true,
-      extra: { trustServerCertificate: true },
+      //extra: { trustServerCertificate: true },
     }),
   ],
 })
