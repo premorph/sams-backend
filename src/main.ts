@@ -18,6 +18,8 @@ async function bootstrap() {
     .setDescription('The sams api documentation')
     .addTag('Auth')
     .addTag('Users')
+    .addTag('Beneficiary')
+    .addTag('Bank')
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('documentation', app, document);

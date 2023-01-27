@@ -4,8 +4,6 @@ import { UserEntity } from 'src/data/entities/user.entity';
 import { Repository } from 'typeorm';
 import { UpdateUserDTO, RegisterUserDTO } from 'src/data/contract/';
 import { encrypt } from '../utils';
-import { UserModel } from '../../data/contract/user.contract';
-
 @Injectable()
 export default class UserService {
   constructor(
@@ -55,7 +53,7 @@ export default class UserService {
       );
     }
   }
-  async GetOne(params: UserModel) {
+  async GetOne(id: string) {
     try {
       const users = await this.userRepository.find({
         select: {
@@ -67,7 +65,7 @@ export default class UserService {
           id: true,
         },
         where: {
-          id: params.id,
+          id: id,
         },
       });
       if (!users)
