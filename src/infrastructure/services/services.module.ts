@@ -8,16 +8,33 @@ import { Bank } from '../../data/entities/bank.entity';
 import { Beneficiary } from '../../data/entities/beneficiary.entity';
 import { BeneficiaryService } from './beneficiary.service';
 import { BankService } from './bank.service';
+import { Jwtstrategy } from '../controllers/auth/strategy/jwtstrategy.service';
 
 @Module({
   imports: [
-    JwtModule.register({
-      signOptions: { expiresIn: '4d' },
-      secret: process.env.SECRET,
+    JwtModule.registerAsync({
+      useFactory: () => {
+        return {
+          signOptions: { expiresIn: '4d' },
+          secret: process.env.SECRET,
+        };
+      },
     }),
     TypeOrmModule.forFeature([UserEntity, Bank, Beneficiary]),
   ],
-  providers: [AuthService, UserService, BeneficiaryService, BankService],
-  exports: [AuthService, UserService, BeneficiaryService, BankService],
+  providers: [
+    AuthService,
+    UserService,
+    BeneficiaryService,
+    Jwtstrategy,
+    BankService,
+  ],
+  exports: [
+    AuthService,
+    Jwtstrategy,
+    UserService,
+    BeneficiaryService,
+    BankService,
+  ],
 })
 export class ServicesModule {}

@@ -10,7 +10,7 @@ export class Beneficiary {
   dni: string;
   @Column({ unique: true })
   email: string;
-  @Column()
+  @Column({ default: true })
   isActive: boolean;
   @OneToMany(() => Bank, (bank) => bank.companyId)
   bankId: Bank[];

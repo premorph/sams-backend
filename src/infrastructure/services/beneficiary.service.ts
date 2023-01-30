@@ -3,7 +3,6 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Beneficiary } from 'src/data/entities';
 import { Repository } from 'typeorm';
 import { RegisterBeneficiaryDTO } from 'src/data/contract/beneficiary.contract';
-import { join } from 'path';
 import { UpdateBeneficiaryDTO } from '../../data/contract/beneficiary.contract';
 
 @Injectable()
@@ -13,26 +12,19 @@ export class BeneficiaryService {
     private readonly beneficiaryRepository: Repository<Beneficiary>,
   ) {}
   async create(params: RegisterBeneficiaryDTO) {
-    try {
-      const isExist = await this.beneficiaryRepository.find({
-        where: { email: params.email },
-      });
-      if (isExist)
-        throw new HttpException('BENEFICIARY_REGISTERED', HttpStatus.CONFLICT);
-      const beneficiary = await this.beneficiaryRepository.save(params);
-      if (!beneficiary)
-        throw new HttpException('SOMETHING WENT WRONG', HttpStatus.BAD_REQUEST);
-      const data = {
-        ok: true,
-        beneficiary,
-      };
-      return data;
-    } catch (error) {
-      throw new HttpException(
-        'INTERNAL_ERROR',
-        HttpStatus.INTERNAL_SERVER_ERROR,
-      );
-    }
+    const isExist = await this.beneficiaryRepository.find({
+      where: { email: params.email },
+    });
+    if (isExist.length < 0)
+      throw new HttpException('BENEFICIARY_REGISTERED', HttpStatus.CONFLICT);
+    const beneficiary = await this.beneficiaryRepository.save(params);
+    if (!beneficiary)
+      throw new HttpException('SOMETHING WENT WRONG', HttpStatus.BAD_REQUEST);
+    const data = {
+      ok: true,
+      beneficiary,
+    };
+    return data;
   }
   async getAll() {
     try {

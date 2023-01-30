@@ -9,7 +9,6 @@ import {
   Body,
 } from '@nestjs/common';
 import { BeneficiaryService } from '../services/beneficiary.service';
-import { RolesGuard } from '../guards/roles.guard';
 import { JWTGuard } from '../guards/jwt.guard';
 import { ApiTags, ApiBearerAuth } from '@nestjs/swagger';
 import { Rol } from '../decorators/rol.decorator';
@@ -18,7 +17,7 @@ import {
   UpdateBeneficiaryDTO,
 } from 'src/data/contract/beneficiary.contract';
 @ApiTags('Beneficiary')
-@UseGuards(JWTGuard, RolesGuard)
+@UseGuards(JWTGuard)
 @ApiBearerAuth()
 @Rol(['admin'])
 @Controller('beneficiary')

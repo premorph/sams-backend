@@ -8,6 +8,7 @@ export class RegisterBeneficiaryDTO {
   @IsNotEmpty()
   @IsEmail()
   email: string;
+  @ApiProperty()
   @IsNotEmpty()
   dni: string;
 }
