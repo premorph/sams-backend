@@ -6,8 +6,10 @@ export class Bank {
   id: string;
   @Column()
   name: string;
-  @Column()
+  @Column({unique:true})
   accountNumber: number;
+  @Column()
+  isActive: boolean;
   @ManyToOne(() => Beneficiary, (beneficiary) => beneficiary.bankId)
   companyId: Beneficiary;
 }
