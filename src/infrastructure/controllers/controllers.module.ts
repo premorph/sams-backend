@@ -6,6 +6,8 @@ import { UserController } from './user/user.controller';
 import { BeneficiaryController } from './beneficiary.controller';
 import { ServicesModule } from '../services/services.module';
 import { BankController } from './bank/bank.controller';
+import { StorageController } from './storage/storage.controller';
+import { BalanceController } from './balance/balance.controller';
 @Module({
   imports: [DataModule, EventEmitterModule.forRoot(), ServicesModule],
   controllers: [
@@ -13,6 +15,8 @@ import { BankController } from './bank/bank.controller';
     UserController,
     BeneficiaryController,
     BankController,
+    StorageController,
+    BalanceController,
   ],
 })
 export class ControllersModule {}

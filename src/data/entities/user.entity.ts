@@ -1,9 +1,9 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, CreateDateColumn, DeleteDateColumn, Entity, Generated, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 
 @Entity()
 export class UserEntity {
-  @PrimaryGeneratedColumn()
-  id: string;
+  @PrimaryGeneratedColumn('increment')
+  id: number;
   @Column()
   fullname: string;
   @Column({ unique: true })
@@ -16,6 +16,12 @@ export class UserEntity {
   profilePicture: string;
   @Column({ default: 'inactivo' })
   isActive: string;
-  @Column()
+  @Column({default:'user'})
   role: string;
+  @CreateDateColumn()
+  created!: Date;
+  @UpdateDateColumn()
+  updated!: Date;
+  @DeleteDateColumn()
+  deletedAt?: Date;
 }

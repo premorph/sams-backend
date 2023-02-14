@@ -6,6 +6,7 @@ import { ConfigModule } from '@nestjs/config';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
 import { EventsModule } from './infrastructure/events/events.module';
+import { StoreService } from './infrastructure/service/store/store.service';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -17,7 +18,7 @@ import { EventsModule } from './infrastructure/events/events.module';
     }),
     EventsModule,
   ],
-  controllers: [AppController],
-  providers: [AppService],
+  controllers: [AppController, ],
+  providers: [AppService, StoreService],
 })
 export class AppModule {}

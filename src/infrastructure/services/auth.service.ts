@@ -14,17 +14,22 @@ export class AuthService {
     @InjectRepository(UserEntity)
     private readonly userRepository: Repository<UserEntity>,
   ) {}
-  async login(params: LoginDTO) {
+  async login(params: {email:string;password:string}) {
+    const body = {...params}
+    console.log(body.email)
     const userExist = await this.userRepository.findOne({
-      where: { email: params.email },
+      where: { email: body.email },
     });
+
     if (!userExist)
       throw new HttpException('USER_NOT_FOUND', HttpStatus.NOT_FOUND);
-
-    const checkPassword = Compare(params.password, userExist.password);
+      console.log(userExist)
+    const checkPassword = await Compare(body.password, userExist.password);
     if (!checkPassword)
       throw new HttpException('USER_NOT_FOUND', HttpStatus.BAD_REQUEST);
     userExist.password = undefined;
+    console.log(userExist)
+
     const payload = {
       id: userExist.id,
       role: userExist.role,
@@ -40,7 +45,7 @@ export class AuthService {
     return data;
   }
   async register(params: RegisterUserDTO) {
-    try {
+    
       const userExist = await this.userRepository.findOne({
         where: { email: params.email },
       });
@@ -55,9 +60,6 @@ export class AuthService {
       console.log(userData);
       if (!userData)
         throw new HttpException('SOMETHING_WENT_WRONG', HttpStatus.BAD_REQUEST);
-      return userData;
-    } catch (error: any) {
-      throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
-    }
-  }
+      return userData;}
+  
 }

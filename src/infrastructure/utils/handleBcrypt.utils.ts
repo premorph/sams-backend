@@ -12,6 +12,6 @@ export function encrypt(textPlain: string): Promise<string> {
  * @param textPlain string
  * @param textHash  string
  */
-export function Compare(textPlain: string, textHash: string) {
-  return compare(textPlain, textHash);
+export async function Compare(textPlain: string, textHash: string):Promise<boolean> {
+  return await compare(textPlain, textHash);
 }

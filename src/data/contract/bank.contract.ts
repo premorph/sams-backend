@@ -7,13 +7,13 @@ export class RegisterBankDTO {
   name: string;
   @ApiProperty()
   @IsNotEmpty()
-  accountNumber: number;
+  accountNumber: string;
   @ApiProperty()
   @IsNotEmpty()
-  companyId: any;
+  company_id: any;
   @ApiProperty()
   @IsNotEmpty()
-  isActive: boolean;
+  isActive: string;
   @ApiProperty()
   user_id: any;
 }
@@ -26,13 +26,13 @@ export class UpdateBankDTO {
   name: string;
   @ApiProperty()
   @IsNotEmpty()
-  accountNumber: number;
+  accountNumber: string;
   @ApiProperty()
   @IsNotEmpty()
-  companyId: any;
+  company_id: any;
   @ApiProperty()
   @IsNotEmpty()
-  isActive: boolean;
+  isActive: string;
   @ApiProperty()
   @IsNotEmpty()
   user_id: any;

@@ -9,6 +9,10 @@ import { Beneficiary } from '../../data/entities/beneficiary.entity';
 import { BeneficiaryService } from './beneficiary.service';
 import { BankService } from './bank.service';
 import { Jwtstrategy } from '../controllers/auth/strategy/jwtstrategy.service';
+import { StorageService } from './storage/storage.service';
+import { Storage } from 'src/data/entities/storage.entity';
+import { BalanceEntity } from 'src/data/entities';
+import { BalanceService } from './balance.service';
 
 @Module({
   imports: [
@@ -20,7 +24,7 @@ import { Jwtstrategy } from '../controllers/auth/strategy/jwtstrategy.service';
         };
       },
     }),
-    TypeOrmModule.forFeature([UserEntity, Bank, Beneficiary]),
+    TypeOrmModule.forFeature([UserEntity, Bank, Beneficiary,Storage,BalanceEntity]),
   ],
   providers: [
     AuthService,
@@ -28,6 +32,7 @@ import { Jwtstrategy } from '../controllers/auth/strategy/jwtstrategy.service';
     BeneficiaryService,
     Jwtstrategy,
     BankService,
+    StorageService,BalanceService
   ],
   exports: [
     AuthService,
@@ -35,6 +40,7 @@ import { Jwtstrategy } from '../controllers/auth/strategy/jwtstrategy.service';
     UserService,
     BeneficiaryService,
     BankService,
+    StorageService,BalanceService
   ],
 })
 export class ServicesModule {}

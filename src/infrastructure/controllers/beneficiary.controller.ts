@@ -19,7 +19,7 @@ import {
 @ApiTags('Beneficiary')
 @UseGuards(JWTGuard)
 @ApiBearerAuth()
-@Rol(['admin'])
+// @Rol(['master'])
 @Controller('beneficiary')
 export class BeneficiaryController {
   constructor(private readonly beneficiaryService: BeneficiaryService) {}
@@ -28,7 +28,7 @@ export class BeneficiaryController {
     return this.beneficiaryService.getAll();
   }
   @Get('/:id')
-  GetOne(@Param() id: string) {
+  GetOne(@Param('id') id: string) {
     return this.beneficiaryService.getOne(id);
   }
   @Post('/')
@@ -36,7 +36,7 @@ export class BeneficiaryController {
     return this.beneficiaryService.create(params);
   }
   @Delete('/:id')
-  DeleteOne(@Param() id: string) {
+  DeleteOne(@Param('id') id: string) {
     return this.beneficiaryService.deleteOne(id);
   }
   @Put('/:id')

@@ -27,46 +27,35 @@ export class BeneficiaryService {
     return data;
   }
   async getAll() {
-    try {
       const beneficiarys = await this.beneficiaryRepository.find();
-      if (!beneficiarys)
+      if (beneficiarys.length<0)
         throw new HttpException('NOT_FOUND', HttpStatus.NOT_FOUND);
       const data = {
         ok: true,
         beneficiarys,
       };
       return data;
-    } catch (error) {
-      throw new HttpException(
-        'INTERNAL_ERROR',
-        HttpStatus.INTERNAL_SERVER_ERROR,
-      );
-    }
   }
   async getOne(id: string) {
-    try {
+
       const beneficiary = await this.beneficiaryRepository.find({
         where: { id: id },
         relations: {
           bankId: true,
         },
       });
-      if (!beneficiary)
-        throw new HttpException('NOT_FOUND', HttpStatus.NOT_FOUND);
+      if (beneficiary.length <= 0) 
+      {throw new HttpException('NOT_FOUND', HttpStatus.NOT_FOUND);
+    }
+    console.log(beneficiary)
       const data = {
         ok: true,
         beneficiary,
       };
       return data;
-    } catch (error) {
-      throw new HttpException(
-        'INTERNAL_ERROR',
-        HttpStatus.INTERNAL_SERVER_ERROR,
-      );
-    }
   }
   async updateOne(params: UpdateBeneficiaryDTO, id: string) {
-    try {
+
       const isExist = await this.beneficiaryRepository.findOne({
         where: { id },
       });
@@ -79,22 +68,16 @@ export class BeneficiaryService {
         throw new HttpException('SOMETHING_WENT_WRONG', HttpStatus.BAD_REQUEST);
       const data = { ok: true, beneficiary };
       return data;
-    } catch (error) {
-      throw new HttpException(
-        'INTERNAL_ERROR',
-        HttpStatus.INTERNAL_SERVER_ERROR,
-      );
-    }
+  
   }
   async deleteOne(id: string) {
-    try {
-      const deleted = await this.beneficiaryRepository.softDelete(id);
-      console.log('deleted->', deleted);
-    } catch (error) {
-      throw new HttpException(
-        'INTERNAL_ERROR',
-        HttpStatus.INTERNAL_SERVER_ERROR,
-      );
-    }
+
+      const deleted = await this.beneficiaryRepository.restore(id);
+      if(deleted.affected===0) throw new HttpException('NOT_FOUND',HttpStatus.NOT_FOUND)
+      const data ={
+        ok:true,
+        message:"Deleted complete"
+      }
+      return data
   }
 }

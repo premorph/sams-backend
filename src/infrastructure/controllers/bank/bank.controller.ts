@@ -4,8 +4,10 @@ import {
   Delete,
   Get,
   Param,
+  ParseIntPipe,
   Post,
   Put,
+  Query,
   Request,
   UseGuards,
 } from '@nestjs/common';
@@ -25,7 +27,8 @@ export class BankController {
     return this.bankService.GetAll();
   }
   @Get('/:id')
-  GetOne(@Param() id: string) {
+  GetOne(@Param('id') id: string) {
+
     return this.bankService.GetOne(id);
   }
   @Post('/')

@@ -11,6 +11,9 @@ export class RegisterBeneficiaryDTO {
   @ApiProperty()
   @IsNotEmpty()
   dni: string;
+  @ApiProperty()
+  @IsNotEmpty()
+  type:boolean;
 }
 export class UpdateBeneficiaryDTO {
   @ApiProperty()

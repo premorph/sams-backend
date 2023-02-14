@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsEmail, IsNotEmpty, MaxLength, MinLength } from 'class-validator';
 export class UserModel {
-  id?: string;
+  id?: number;
   @MinLength(5)
   @MaxLength(20)
   fullname: string;
@@ -29,15 +29,12 @@ export class LoginDTO {
 
   @ApiProperty()
   @MinLength(5)
-  @MinLength(8)
+  @MaxLength(8)
   @IsNotEmpty()
   password: string;
 }
 export class UpdateUserDTO {
-  @ApiProperty()
-  @IsNotEmpty()
-  id: string;
-
+  id:number
   @ApiProperty()
   @MinLength(5)
   @MaxLength(20)

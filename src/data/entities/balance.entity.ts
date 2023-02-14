@@ -4,36 +4,36 @@ import { Bank } from './bank.entity';
 import { Store } from './store.entity';
 import { UserEntity } from './user.entity';
 @Entity()
-export class BalanceEntity {
+export class BalanceEntity {  
   @PrimaryGeneratedColumn()
   id: number;
-  @Column()
+  @Column({nullable:true})
   date?: string;
   @OneToOne(() => Bank, (bank) => bank.id)
   bankFrom?: string;
-  @OneToOne(() => Store, (store) => store.id)
+  @OneToOne(() => Beneficiary, (beneficiary) => beneficiary.id)
   company?: Store;
   @OneToOne(() => Beneficiary, (beneficiary) => beneficiary.id)
   beneficiary?: Beneficiary;
   @OneToOne(() => Bank, (bank) => bank.id)
   bankTo?: Bank;
-  @Column()
+  @Column({nullable:true})
   amount?: number;
-  @Column()
+  @Column({nullable:true})
   rate?: number;
-  @Column()
+  @Column({nullable:true})
   bs?: number;
-  @Column()
+  @Column({nullable:true})
   boughtFrom?: string;
-  @Column()
+  @Column({nullable:true})
   datePay?: string;
-  @Column({ default: 'Pendiente' })
-  status: 'Pendiente' | 'Entregado';
-  @Column()
+  @Column({nullable:true})
+  status: string;
+  @Column({nullable:true})
   ref?: string;
-  @Column()
+  @Column({nullable:true})
   note?: string;
-  @Column()
+  @Column({nullable:true})
   obsvervation?: string;
   @OneToOne(() => UserEntity, (user) => user.id)
   user_id: UserEntity;

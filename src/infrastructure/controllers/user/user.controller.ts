@@ -10,15 +10,15 @@ import {
 } from '@nestjs/common';
 import { RegisterUserDTO } from 'src/data/contract/user.contract';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
-import { RolesGuard } from 'src/infrastructure/guards/roles.guard';
 import { JWTGuard } from 'src/infrastructure/guards/jwt.guard';
 import UserService from 'src/infrastructure/services/user.service';
 import { Rol } from 'src/infrastructure/decorators/rol.decorator';
 import { UpdateUserDTO } from '../../../data/contract/user.contract';
+import { FindOperator } from 'typeorm';
 @ApiTags('Users')
-@UseGuards(JWTGuard, RolesGuard)
+@UseGuards(JWTGuard)
 @ApiBearerAuth()
-@Rol(['admin'])
+@Rol(['master'])
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
@@ -27,7 +27,8 @@ export class UserController {
     return this.userService.GetAll();
   }
   @Get('/:id')
-  GetOne(@Param() id: string) {
+  GetOne(@Param('id') id: number) {
+    console.log(id)
     return this.userService.GetOne(id);
   }
   @Post('/')
@@ -35,11 +36,11 @@ export class UserController {
     return this.userService.create(params);
   }
   @Delete('/:id')
-  DeleteOne(@Param() id: string) {
+  DeleteOne(@Param('id') id: string) {
     return this.userService.DeleteOne(id);
   }
   @Put('/:id')
-  UpdateOne(@Body() params: UpdateUserDTO, @Param() id: string) {
-    return this.userService.UpdateOne(params, id);
+  UpdateOne(@Body() params: UpdateUserDTO, @Param('id') id: string) {
+    return this.userService.UpdateOne(params, parseInt(id));
   }
 }

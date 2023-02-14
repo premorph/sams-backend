@@ -31,15 +31,17 @@ export class BankService {
     return data;
   }
   async GetAll() {
-    const banks = await this.bankRepository.find();
+    const banks = await this.bankRepository.find({relations:{
+company_id:true      
+    }});
     if (!banks) throw new HttpException('NOT_FOUND', HttpStatus.NOT_FOUND);
     const data = { ok: true, banks };
     return data;
   }
-  async GetOne(id: string) {
+  async GetOne(id:string) {
     const banks = await this.bankRepository.findOne({ where: { id: id } });
     if (!banks)
-      throw new HttpException('ACCOUNT_BANK_REGISTERED', HttpStatus.CONFLICT);
+      throw new HttpException('NOT_FOUND', HttpStatus.NOT_FOUND);
     const data = { ok: true, banks };
     return data;
   }

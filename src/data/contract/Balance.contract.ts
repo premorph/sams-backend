@@ -1,4 +1,9 @@
 export interface BalanceContract {
-  date: Date;
-  datePay: Date;
+  id?:number;
+  amount?:number;
+  rate?:number;
+  bs?:number;
+  datePay?:string;
+  ref?:string;
+  note?:string;
 }

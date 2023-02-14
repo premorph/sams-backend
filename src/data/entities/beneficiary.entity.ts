@@ -1,4 +1,4 @@
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, CreateDateColumn, DeleteDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 import { Bank } from './bank.entity';
 @Entity()
 export class Beneficiary {
@@ -12,6 +12,14 @@ export class Beneficiary {
   email: string;
   @Column({ default: true })
   isActive: boolean;
-  @OneToMany(() => Bank, (bank) => bank.companyId)
+  @Column({default:1})
+  type: boolean; 
+  @OneToMany(() => Bank, (bank) => bank.company_id)
   bankId: Bank[];
+  @CreateDateColumn()
+  created!: Date;
+  @UpdateDateColumn()
+  updated!: Date;
+  @DeleteDateColumn()
+  deletedAt?: Date;
 }
