@@ -11,9 +11,9 @@ export class BalanceController {
     getAll(){
        return this.balanceService.GetAll()
     }
-    @Delete()
-    delete(){
-        return this.balanceService.DeleteOne
+    @Delete('/:id')
+    delete(@Param('id') id:number){
+        return this.balanceService.DeleteOne(id)
     }
     @Put('/:id')
     update(@Param('id') id:number, @Body() param:BalanceEntity){
